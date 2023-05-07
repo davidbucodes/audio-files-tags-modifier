@@ -23,12 +23,17 @@ export class TagsService {
     });
   }
 
-  setFileNameAsTitle(path: string) {
+  setFileNameAsTitle(path: string, album?: string) {
     const audioFiles = this.explorerService.listAudioFiles(path);
     audioFiles.forEach((file) => {
       const fullPath = join(path, file);
 
       const { title } = NodeID3.read(fullPath);
+
+      const tagsPatch = {
+        album,
+      };
+      NodeID3.update(tagsPatch, fullPath);
 
       fs.renameSync(fullPath, join(path, `${title}.mp3`));
     });
