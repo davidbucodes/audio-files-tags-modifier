@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
 import * as NodeID3 from 'node-id3';
 import { join } from 'path';
 import { ExplorerService } from '../explorer/explorer.service';
@@ -19,6 +20,17 @@ export class TagsService {
         album,
       };
       NodeID3.update(tagsPatch, fullPath);
+    });
+  }
+
+  setFileNameAsTitle(path: string) {
+    const audioFiles = this.explorerService.listAudioFiles(path);
+    audioFiles.forEach((file) => {
+      const fullPath = join(path, file);
+
+      const { title } = NodeID3.read(fullPath);
+
+      fs.renameSync(fullPath, join(path, `${title}.mp3`));
     });
   }
 }

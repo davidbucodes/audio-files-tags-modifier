@@ -9,7 +9,7 @@ async function main() {
   const folders = fs.readdirSync('./files');
   console.log(folders);
   for (const folder of folders) {
-    tagsService.setTitleAsFileName('./files/' + folder, folder);
+    tagsService.setFileNameAsTitle('./files/' + folder);
   }
 }
 main();
