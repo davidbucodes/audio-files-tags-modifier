@@ -1,8 +1,15 @@
 import { NestFactory } from '@nestjs/core';
+import * as fs from 'fs';
 import { AppModule } from './app.module';
+import { TagsService } from './tags/tags.service';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+async function main() {
+  const app = await NestFactory.createApplicationContext(AppModule);
+  const tagsService = app.get(TagsService);
+  const folders = fs.readdirSync('./files');
+  console.log(folders);
+  for (const folder of folders) {
+    tagsService.setTitleAsFileName('./files/' + folder, folder);
+  }
 }
-bootstrap();
+main();
